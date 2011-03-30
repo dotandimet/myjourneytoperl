@@ -1,0 +1,6 @@
+Use [GraphViz](http://search.cpan.org/~lbrocard/GraphViz-2.04/lib/GraphViz.pm)
+to plot the links in the [#myjourneytoperl](http://twitter.com/#!/search?q=%23myjourneytoperl) Twitter meme
+
+Data fetched with [Mojolicious](http://mojolicio.us) **ojo.pm**
+
+
