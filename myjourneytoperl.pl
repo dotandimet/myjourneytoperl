@@ -35,7 +35,7 @@ foreach my $o (@$r) {
 
     next unless ($text =~ /\>/);
 
-    my @nodes = split(/-*\>/, $text);
+    my @nodes = split(/[\=\-]*\>/, $text);
     # trim whitespace:
     @nodes = map { s/(^\s+|\s+$)//g; $_; } @nodes;
     for (my $i = 0; $i< @nodes; $i++) {
