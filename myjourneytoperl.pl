@@ -12,6 +12,7 @@ my %nodes;
 my %edges;
 my $output_format;
 my %tweets;
+my %bad_tweets;
 my $data_file;
 my $no_search;
 
@@ -59,6 +60,9 @@ else {
 if ($data_file) {
     save_data($data_file);
 }
+if (keys %bad_tweets > 0) {
+    save_bad_data();
+}
 # draw graph:
 
 my $g = GraphViz->new();
@@ -69,7 +73,7 @@ foreach my $node ( keys %nodes ) {
 
 foreach my $edge ( keys %edges ) {
     my ( $from, $to ) = @{ $edges{$edge}{'nodes'} };
-    my $label = join( '\n', map { '@' . $_ } @{ $edges{$edge}{'users'} } );
+    my $label = join( '\n', map { '@' . $_ } sort keys %{ $edges{$edge}{'users'} } );
     $g->add_edge( $from, $to, label => $label );
 }
 
@@ -144,6 +148,7 @@ qr/(\x{219b}|\x{2192}|\x{21af}|\x{21ba}|\x{21c4}|\x{21af}|\x{21d2}|\x{21af}|\x{2
     #print "TEXT is $text";
     if (!$text || $text eq '') {
         warn "No text from tweet $id? " . $tweet->{'text'};
+        $bad_tweets{$id} = $tweet;
         return;
     }
     # Forget about those Re-Tweeters:
@@ -184,8 +189,8 @@ sub store_journey {
         $nodes{$node}++;
         if ($next) {
             my $edge = "$node -> $next";
-            $edges{$edge} ||= { nodes => [ $node, $next ], users => [] };
-            push @{ $edges{$edge}{'users'} }, $user;
+            $edges{$edge} ||= { nodes => [ $node, $next ], users => {} };
+            $edges{$edge}{'users'}{$user}++;
         }
         $next = $node;
     }
@@ -195,4 +200,8 @@ sub store_journey {
 sub save_data {
     my ($save_file) = @_;
     nstore \%tweets, $save_file; 
+}
+
+sub save_bad_data {
+    nstore \%bad_tweets, "bad_tweets";
 }
