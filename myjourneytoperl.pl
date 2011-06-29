@@ -158,7 +158,7 @@ sub process_tweet {
     if ($nodes[$#nodes] =~ /^perl[^a-zA-Z]/i) {
         ($nodes[$#nodes]) = split(/\s+/, $nodes[$#nodes]);
     }
-    @nodes = map { normalize_nodes($_); } @nodes;
+    @nodes = map { normalize_node($_); } @nodes;
     $tweet->{'_nodes'} = \@nodes;
     store_journey( $user, @nodes );
 

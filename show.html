@@ -1,0 +1,36 @@
+<html>
+<head>
+     <title>#myjourneytoperl</title>
+     <script type="text/javascript" src="tweets_inc.js">
+     </script>
+     <script type="text/javascript" src="jquery.js">
+     </script>
+     <script type="text/javascript">
+        $(function() {
+        var keys = 
+        for (var k in tweets) {
+            var tweet = tweets[k];
+            setTimeout(function() { set_tweet(tweet); }, 1000);
+        }
+        });
+
+        function set_tweet(tw) {
+           console.log(tw.id_str);
+           $('#text').html(tw.text);
+        }
+
+     </script>
+     <style type="text/css">
+    #text { width: 30em; margin-top: 2em; margin-left: auto; margin-right:
+    auto; font-size: 1em; }
+
+     </style>
+ </head>
+ <body>
+ <div class="display">
+ <div id="text"></div>
+ <div class="bottom"></div>
+ </div>
+
+ </body>
+ </html>

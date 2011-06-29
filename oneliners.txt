@@ -1,0 +1,18 @@
+# convert from storable to json:
+perl -MTweets -le 'my $t = Tweets->new; $t->load(shift); $t->enliven; $t->save_json(q{tweets.js});' tweets
+
+# print all users:
+perl -MTweets -le 'my $t = Tweets->new; $t->load_json(q{tweets.js}); $t->forEach(sub{ print $_[0]->{from_user}; });'
+
+
+# output edges:
+	my $t = Tweets->new; $t->load_json(q{tweets.js}); $t->forEach(sub { print $_[1]; }); my ($n, $e) = $t->gather_edges; foreach my $ed (keys %$e) { print join qq{\t}, @{$e->{$ed}{nodes}}, join(q{ }, sort keys %{ $e->{$ed}{users} }), qq{\n}; }
+
+# save nodes:
+ perl -MTweets -le 'my $t = Tweets->new; $t->load_json(q{tweets.js}); $t->forEach(sub { Tweets::set_tweet_nodes(@_); }); $t->save_json(q{tweets_with_nodes.js});
+
+# prettify:
+ < tweets_with_nodes.js json_xs >tweets_with_nodes_pretty.js
+
+#graph:
+perl -MTweets -le 'my $t = Tweets->new; $t->load_json(q{tweets.js}); $t->draw_graph(qw(graph svg));'
